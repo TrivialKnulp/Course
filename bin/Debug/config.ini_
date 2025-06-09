@@ -1,0 +1,9 @@
+[Database]
+File=C:\Projekte\C#\_Elena\Data.db
+
+[Logging]
+ShowDialogs=OFF
+
+[Window]
+Width=1280
+Height=960

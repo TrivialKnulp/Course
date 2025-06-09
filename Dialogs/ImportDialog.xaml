@@ -1,0 +1,38 @@
+﻿<Window x:Class="Shop.Dialogs.ImportDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Shop.Dialogs"
+        mc:Ignorable="d"
+        Title="Імпорт даних..." Height="320" Width="450" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Джерело імпорту" Margin="0,0,0,10">
+            <StackPanel Orientation="Vertical" Margin="10">
+                <RadioButton Name="RadioDirectory" Content="Вибрати папку" IsChecked="True"/>
+                <RadioButton Name="RadioZip" Content="Вибрати ZIP-файл"/>
+                <Button Content="Пошук..." Click="Browse_Click" Margin="0,10,0,0"/>
+                <TextBox Name="PathBox" IsReadOnly="True" Margin="0,5,0,0"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Формати імпорту" Grid.Row="1">
+            <StackPanel Orientation="Vertical" Margin="10">
+                <CheckBox Name="JsonCheck" Content="Імпортувати JSON-файл" IsChecked="True"/>
+                <CheckBox Name="CsvCheck" Content="Імпортувати CSV-файл" IsChecked="True"/>
+                <CheckBox Name="SqliteCheck" Content="Імпортувати базу SQLite"/>
+            </StackPanel>
+        </GroupBox>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="Імпортувати" Width="100" Margin="5" Click="Import_Click"/>
+            <Button Content="Скасувати" Width="100" Margin="5" Click="Cancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

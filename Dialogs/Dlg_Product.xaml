@@ -1,0 +1,64 @@
+﻿<!--
+    Вікно Dlg_Product використовується для додавання або редагування товару.
+    Дозволяє ввести назву товару, вибрати категорію, вказати ціну та одиницю виміру.
+-->
+    <Window x:Class="Shop.Dialogs.Dlg_Product"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Shop.Dialogs"
+        mc:Ignorable="d"
+        Title="Додати товар..." Height="220" Width="450" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+
+        <!-- Область введення товару -->
+        <Grid Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="64*"/>
+                <ColumnDefinition Width="64*"/>
+                <ColumnDefinition Width="13*"/>
+                <ColumnDefinition Width="30*"/>
+                <ColumnDefinition Width="64*"/>
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Column="1" Content="Назва товару:" Height="26" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBox x:Name="NameTextBox" Grid.Column="2" Grid.ColumnSpan="5" VerticalAlignment="Center" />
+            <Label Grid.Row="1" Grid.Column="1" Content="Категорія:" Height="26" HorizontalAlignment="Right" VerticalAlignment="Center"  Width="96" />
+            <ComboBox x:Name="CategoryComboBox" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="4" Height="22" VerticalAlignment="Center" />
+            <Label Grid.Row="2" Grid.Column="1" Content="Ціна:" Height="26" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBox x:Name="PriceTextBox" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" VerticalAlignment="Center" PreviewTextInput="DecimalOnly_PreviewTextInput" PreviewKeyDown="DecimalOnly_PreviewKeyDown"/>
+            <Label Grid.Row="2" Grid.Column="5" Content="Одиниця:" Height="26" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBox x:Name="UnitTextBox" Grid.Row="2" Grid.Column="6" VerticalAlignment="Center" />
+        </Grid>
+        
+        <!-- Кнопки -->
+        <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content = "ОК" Height="30" Margin="5" VerticalAlignment="Bottom" Click="BtnOK_Click"/>
+            <Button Grid.Column="1" Content = "Скасувати" Height="30" Margin="5" VerticalAlignment="Bottom" Click="BtnCancel_Click" />
+        </Grid>
+    </Grid>
+</Window>

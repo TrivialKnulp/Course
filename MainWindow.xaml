@@ -1,0 +1,162 @@
+﻿<Window x:Class="Shop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Shop"
+        xmlns:viewModels="clr-namespace:Shop.ViewModels" d:DataContext="{d:DesignInstance Type=viewModels:InvoicesViewModel}"
+        mc:Ignorable="d"
+        Title="Складська система Версія 1.0a - OS Systems Ltd." Height="720" Width="1280" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="197*"/>
+            <ColumnDefinition Width="5"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Головне меню -->
+        <Menu VerticalAlignment="Top" Grid.Column="1">
+            <!-- Склад -->
+            <MenuItem Header="Склад">
+                <!-- Управління даними -->
+                <MenuItem Header="Управління даними">
+                    <MenuItem Name="ImportData" Header="Імпорт" Click="ImportData_Click"/>
+                    <MenuItem Name="ExportData" Header="Експорт" Click="ExportData_Click" />
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Вихід" Click="Exit_Click"/>
+            </MenuItem>
+
+            <!-- Категорія -->
+            <MenuItem Header="Категорія">
+                <MenuItem Header="Додати" Click="AddCategory_Click"/>
+                <MenuItem Header="Редагувати" Click="EditCategory_Click"/>
+                <Separator />
+                <MenuItem Header="Видалити" Click="DeleteCategory_Click"/>
+            </MenuItem>
+
+            <!-- Товари -->
+            <MenuItem Header="Товари">
+                <MenuItem Header="Додати" Click="AddProduct_Click" />
+                <MenuItem Header="Редагувати" Click="EditProduct_Click"/>
+                <Separator />
+                <MenuItem Header="Видалити" Click="DeleteProduct_Click"/>
+                <Separator />
+                <MenuItem Name="SearchProductName" Header="Пошук за назвою" Click="SearchProductName_Click" />
+                <MenuItem Name="SearchProductCategory" Header="Пошук за категорією" Click="SearchProductCategory_Click" />
+                <MenuItem Name="SearchProductPrice" Header="Пошук за ціною" Click="SearchProductPrice_Click" />
+                <MenuItem Name="SearchProductAvailability" Header="Пошук за наявністю" Click="SearchProductAvailability_Click" />
+            </MenuItem>
+
+            <!-- Фінанси -->
+            <MenuItem Header="Фінанси">
+                <MenuItem Name="PostGoodsReceipt"  Header="Оприбуткувати товар" Click="PostGoodsReceipt_Click" />
+                <Separator />
+                <MenuItem Name="CreateReceipt" Header="Створити накладну" Click="CreateReceipt_Click" />
+                <MenuItem Name="SellWithDiscount" Header="Продаж зі знижкою" Click="SellWithDiscount_Click" />
+                <MenuItem Name="DepreciationOfGoods" Header="Списання товару" Click="DepreciationOfGoods_Click" />
+                <Separator />
+                <MenuItem Name="Inventory" Header="Інвентаризація" Click="Inventory_Click" />
+            </MenuItem>
+
+            <!-- Звіти -->
+            <MenuItem Header="Звіти">
+                <MenuItem Name="SalesReport" Header="Продажі" Click="SalesReport_Click" />
+                <MenuItem Name="StockReport" Header="Залишки" Click="StockReport_Click" />
+                <MenuItem Name="DepreciationReport" Header="Списання" Click="DepreciationReport_Click" />
+                <MenuItem Name="DiscountReport" Header="Знижки" Click="DiscountReport_Click" />
+            </MenuItem>
+        </Menu>
+
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="500"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- TabControl для категорій, товарів, накладних, списань -->
+                <TabControl Margin="0,30,0,0" Grid.Row="0">
+                    <!-- Вкладка Категорія -->
+                    <TabItem Header="Категорія" Background="LightBlue" MinWidth="200">
+                        <DataGrid Name="dataGridCategory" ItemsSource="{Binding CategoryViewModel.Categories}" Background="LightBlue" CanUserAddRows="False" Margin="5" AutoGenerateColumns="False" SelectionChanged="DataGridCategory_SelectionChanged">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding CategoryID}" MinWidth="80" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Назва категорії" Binding="{Binding CategoryName}" Width="*" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+
+                    <!-- Вкладка Товари -->
+                    <TabItem Header="Товари" Background="LightYellow" MinWidth="200">
+                        <DataGrid Name="dataGridProducts" ItemsSource="{Binding ProductViewModel.Products}" CanUserAddRows="False" Background="LightYellow" Margin="5" AutoGenerateColumns="False" SelectionChanged="DataGridProducts_SelectionChanged">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding ProductID}" MinWidth="80" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Id категорії" Binding="{Binding CategoryId}" Width="0" IsReadOnly="True" Visibility="Hidden"/>
+                                <DataGridTextColumn Header="Категорія" Binding="{Binding CategoryName}" Width="1*" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Назва товару" Binding="{Binding Name}" Width="2*" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Кількість" Binding="{Binding Quantity, StringFormat={}{0:F2}}" Width="80" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Одиниця" Binding="{Binding Unit}" Width="50" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Ціна [€]" Binding="{Binding Price, StringFormat={}{0:F2}}" Width="150" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Остання поставка" Binding="{Binding LastDeliveryDate}" Width="80" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+
+                    <!-- Вкладка Накладні -->
+                    <TabItem Header="Накладні" Background="LightGreen" MinWidth="200">
+                        <StackPanel>
+                            <!-- Головна таблиця накладних -->
+                            <DataGrid Name="dataGridInvoices"
+                              ItemsSource="{Binding InvoicesViewModel.Invoices}"
+                              SelectedItem="{Binding InvoicesViewModel.SelectedInvoice}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              Margin="5">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Id накладної" Binding="{Binding InvoiceID}" Width="1*"/>
+                                    <DataGridTextColumn Header="Дата продажу" Binding="{Binding SaleDate}" Width="4*"/>
+                                    <DataGridTextColumn Header="Сума [€]" Binding="{Binding TotalPrice, StringFormat={}{0:F2}}" Width="2*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                            <!-- Деталі накладної -->
+                            <DataGrid Name="dataGridInvoiceDetails" ItemsSource="{Binding InvoicesViewModel.InvoiceDetails}" AutoGenerateColumns="False" CanUserAddRows="False" Margin="5">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Назва товару" Binding="{Binding ProductName}" Width="200*"/>
+                                    <DataGridTextColumn Header="Кількість" Binding="{Binding Quantity, StringFormat={}{0:F2}}" Width="100"/>
+                                    <DataGridTextColumn Header="Одиниця" Binding="{Binding Unit}" Width="80"/>
+                                    <DataGridTextColumn Header="Знижка [%]" Binding="{Binding Discount, StringFormat={}{0:F2}}" Width="80"/>
+                                    <DataGridTextColumn Header="Ціна [€]" Binding="{Binding Price, StringFormat={}{0:F2}}" Width="80"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </TabItem>
+
+                    <!-- Вкладка Списання -->
+                    <TabItem Header="Списання" Background="MistyRose" MinWidth="200">
+                        <DataGrid Name="dataGridDepreciations" ItemsSource="{Binding DepreciationViewModel.Depreciations}" AutoGenerateColumns="False" IsReadOnly="True" Margin="5">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding DepreciationID}" Width="50" />
+                                <DataGridTextColumn Header="Товар" Binding="{Binding ProductName}" Width="2*" />
+                                <DataGridTextColumn Header="Кількість" Binding="{Binding Quantity}" Width="*" />
+                                <DataGridTextColumn Header="Причина" Binding="{Binding Reason}" Width="2*" />
+                                <DataGridTextColumn Header="Дата" Binding="{Binding Date}" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                </TabControl>
+
+                <!-- Журнал дій -->
+                <DataGrid Name="dataGridLog" Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding LogViewModel.Logs}" CanUserAddRows="False" IsReadOnly="True" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Час" Binding="{Binding Timestamp}" Width="130" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Дія" Binding="{Binding Level}" Width="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Деталі" Binding="{Binding Message}" Width="1*" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </StackPanel>
+    </Grid>
+
+</Window>

@@ -1,0 +1,41 @@
+﻿<!--
+    Вікно DatabaseExportDialog використовується для експорту даних із системи.
+    Дозволяє вибрати формат експорту (JSON, CSV, база SQLite), шлях для збереження та виконати або скасувати експорт.
+   
+--><Window x:Class="Shop.Dialogs.DatabaseExportDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Shop.Dialogs"
+        mc:Ignorable="d"
+        Title="Експорт даних..." Height="250" Width="420" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Експортувати у:" FontWeight="Bold" />
+
+        <StackPanel Grid.Row="1" Margin="10,5,0,0">
+            <RadioButton Name="RadioJson" Content="JSON" IsChecked="True"/>
+            <RadioButton Name="RadioCsv" Content="CSV" />
+            <RadioButton Name="RadioSqlite" Content="База SQLite" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,0">
+            <TextBox Name="PathTextBox" Width="280" IsReadOnly="True" Margin="0,0,10,0"/>
+            <Button Content="Вибрати папку" Width="90" Click="SelectFolder_Click"/>
+        </StackPanel>
+
+        <Button Grid.Row="3" Content="Експортувати дані" Height="35" Width="180" Margin="0,10,-200,0" Click="Export_Click"/>
+        <Button Grid.Row="3" Content="Закрити" Height="35" Width="180" Margin="0,10,200,0" Click="Button_Click"/>
+
+        <TextBlock Name="StatusText" Grid.Row="4" Margin="0,10,0,0" TextWrapping="Wrap"/>
+    </Grid>
+</Window>
